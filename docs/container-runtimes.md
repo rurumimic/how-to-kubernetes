@@ -11,77 +11,80 @@ Pods에서 컨테이너를 실행하기 위해서, 쿠버네티스는 컨테이�
 
 ## Docker
 
-- [Docker CE: CentOS](https://docs.docker.com/install/linux/docker-ce/centos/)
+- [K8S: Docker](https://kubernetes.io/docs/setup/production-environment/container-runtimes/#docker)
 
-### 저장소 설정
+다음은 Ubuntu 18에서 Docker v19.03.4 설치 방법이다.
 
-필요한 패키지 설치
+### Ubuntu 18
+
+root 권한으로 진행한다.
 
 ```bash
-sudo yum install -y yum-utils device-mapper-persistent-data lvm2
-
-Complete!
+sudo -Es
 ```
 
-- `yum-utils`: `yum-config-manager` 유틸 제공
-- `device-mapper-persistent-data`, `lvm2`: `devicemapper` storage driver가 필요.
+#### 저장소 설정
 
-도커 저장소 추가
+필요한 패키지 설치  
+HTTPS를 통해 저장소를 사용할 수 있도록 설치  
 
 ```bash
-sudo yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
-
-repo saved to /etc/yum.repos.d/docker-ce.repo
+apt-get update && apt-get install -y \
+  apt-transport-https ca-certificates curl software-properties-common
 ```
 
-### Docker CE 설치
-
-Version 19.03.4
+도커 공식 GPG key 추가
 
 ```bash
-sudo yum -y update;
-sudo yum -y install containerd.io-1.2.10 docker-ce-19.03.4 docker-ce-cli-19.03.4;
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add -
 ```
 
-### /etc/docker 생성
+도커 apt 저장소 추가
 
 ```bash
-sudo mkdir /etc/docker
+add-apt-repository \
+  "deb [arch=amd64] https://download.docker.com/linux/ubuntu \
+  $(lsb_release -cs) \
+  stable"
 ```
 
-### 데몬 설정
+#### Docker CE 설치
 
 ```bash
-sudo bash -c 'cat > /etc/docker/daemon.json <<EOF
+apt-get update && apt-get install -y \
+  containerd.io=1.2.10-3 \
+  docker-ce=5:19.03.4~3-0~ubuntu-$(lsb_release -cs) \
+  docker-ce-cli=5:19.03.4~3-0~ubuntu-$(lsb_release -cs)
+```
+
+#### 데몬 설정
+
+```bash
+cat > /etc/docker/daemon.json <<EOF
 {
   "exec-opts": ["native.cgroupdriver=systemd"],
   "log-driver": "json-file",
   "log-opts": {
     "max-size": "100m"
   },
-  "storage-driver": "overlay2",
-  "storage-opts": [
-    "overlay2.override_kernel_check=true"
-  ]
+  "storage-driver": "overlay2"
 }
-EOF'
+EOF
 ```
 
 ```bash
-sudo mkdir -p /etc/systemd/system/docker.service.d
+mkdir -p /etc/systemd/system/docker.service.d
 ```
 
-### 도커 시작
+#### 도커 시작
 
 ```bash
-sudo systemctl daemon-reload
-sudo systemctl start docker
-sudo systemctl enable docker
-
-Created symlink from /etc/systemd/system/multi-user.target.wants/docker.service to /usr/lib/systemd/system/docker.service.
+systemctl daemon-reload
+systemctl restart docker
+systemctl enable docker
 ```
 
-### (Option) non-root user
+#### (Option) non-root user
 
 ```bash
 sudo groupadd docker;

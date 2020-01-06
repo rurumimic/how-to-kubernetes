@@ -1,24 +1,34 @@
 # How to Kubernetes
 
-- [Kubernetes.io](https://kubernetes.io/)
-- [Documentation](https://kubernetes.io/docs/home/)
+쿠버네티스 정리
+
+- [Kubernetes.io](https://kubernetes.io/): 쿠버네티스 공식 홈페이지
+- [Documentation](https://kubernetes.io/docs/home/): 쿠버네티스 문서
+- [Getting started](https://kubernetes.io/docs/setup/)
+
+## Learning Environment
+
+- [K8S: Installing Kubernetes with Minikube](https://kubernetes.io/docs/setup/learning-environment/minikube/)
+
+미니큐브로 쿠버네티스 환경 연습하기
+
+- [Minikube](/docs/minikube.md): 설치와 간단한 실습
 
 ## Production Environment
 
-- [Container runtimes](https://kubernetes.io/docs/setup/production-environment/container-runtimes/)
-- Installing Kubernetes with deployment tools
-  - Bootstrapping clusters with kubeadm
-  - Installing Kubernetes with kops
-  - Installing Kubernetes with KRIB
-  - Installing Kubernetes with Kubespray
+쿠버네티스 클러스터를 구축하는 방법은 여러가지다.
+
+1. kubeadm을 사용해 클러스터 구축하기
+   1. Single control-plane cluster
+   2. HA clusters: Stacked etcd topology
+   3. [HA clusters: External etcd topology](/docs/external-topology.md)
+2. Installing Kubernetes with kops
+3. Installing Kubernetes with KRIB
+4. Installing Kubernetes with Kubespray
 
 ---
 
-## 템플릿 VM 생성
-
-[Installing kubeadm](https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/install-kubeadm/)
-
-### 사양
+## 사양
 
 - OS
   - Ubuntu 16.04+
@@ -34,3 +44,5 @@
 - 유일한 hostname, MAC 주소, product_uuid
 - 특정 포트 개방
 - **반드시** Swap disabled
+
+---
