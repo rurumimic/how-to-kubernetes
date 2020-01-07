@@ -22,11 +22,11 @@
 3. Installing Kubernetes with KRIB
 4. Installing Kubernetes with Kubespray
 
-### Stacked와 External Topoplogy
+### Stacked와 External Topology
 
-Stacked Topoplogy는 설정이 간단하고, 복제 관리도 간단하다. 하지만 한 노드가 다운되면 etcd 멤버와 control plane 인스턴스가 모두 손실되고 자료가 손상된다.
+Stacked Topology는 설정이 간단하고, 복제 관리도 간단하다. 하지만 한 노드가 다운되면 etcd 멤버와 control plane 인스턴스가 모두 손실되고 자료가 손상된다.
 
-External Topoplogy는 제어부와 데이터 스토리지를 분리했다. control plane 호스트나 etcd 멤버를 잃어도 영향이 적은 안정적인 HA 설정이 가능하다. 하지만 Stacked HA 토폴로지보다 호스트가 배로 필요하다.
+External Topology는 제어부와 데이터 스토리지를 분리했다. control plane 호스트나 etcd 멤버를 잃어도 영향이 적은 안정적인 HA 설정이 가능하다. 하지만 Stacked HA Topology보다 호스트가 배로 필요하다.
 
 ---
 
