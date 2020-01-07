@@ -22,6 +22,7 @@ W0106 16:09:11.816960    5664 validation.go:28] Cannot validate kubelet config -
 sudo kubeadm join 192.168.10.101:6443 --token jjnixg.bbg4e7amhd32vi1r \
 >     --discovery-token-ca-cert-hash sha256:fb36418e348299619133891bc1ae1dafee6facf8ef8962c135d6ba7b357f00e1 \
 >     --control-plane --certificate-key 06c4a3bb5a5525014c5c358991de8cfc3e66c21f471517ef6ddbf361f5d63c25
+
 [preflight] Running pre-flight checks
 [preflight] Reading configuration from the cluster...
 [preflight] FYI: You can look at this config file with 'kubectl -n kube-system get cm kubeadm-config -oyaml'
@@ -81,9 +82,7 @@ Run 'kubectl get nodes' to see this node join the cluster.
 
 ```bash
 kubectl get nodes
-```
 
-```bash
 NAME             STATUS   ROLES    AGE     VERSION
 controlplane-1   Ready    master   11m     v1.17.0
 controlplane-2   Ready    master   2m57s   v1.17.0

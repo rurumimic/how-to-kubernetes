@@ -1,4 +1,4 @@
-# Worker 1번
+# Worker
 
 ## Join
 

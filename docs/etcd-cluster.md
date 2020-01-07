@@ -2,11 +2,13 @@
 
 [K8S: External etcd nodes](https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/high-availability/#external-etcd-nodes)
 
+---
+
 ## SSH 설정
 
 etcd 클러스터에 파일을 공유하기 위해 미리 ssh를 설정한다.
 
-etcd-1 호스트에서 관리자 권한으로 진행한다.
+`etcd-1`에서 관리자 권한으로 진행한다.
 
 ```bash
 sudo -Es
@@ -36,7 +38,7 @@ sudo -Es
 vi /root/.ssh/authorized_keys
 ```
 
-etcd-1에서 SSH로 나머지 두 etcd 호스트에 접속해본다.
+`etcd-1`에서 SSH로 나머지 두 etcd 호스트에 접속해본다.
 
 ```bash
 root@etcd-1:~$ ssh -A 192.168.10.122
@@ -53,17 +55,23 @@ root@etcd-3:~# exit
 vagrant@etcd-1:~$
 ```
 
+---
+
 ## kubeadm
 
 etcd 호스트 3 곳에서 공통적으로 관리자 권한으로 진행한다.
 
-다음 과정을 따라 한다: [kubeadm 설치](/docs/install-kubeadm.md)
+다음 과정을 따라 한다: **[kubeadm 설치](/docs/install-kubeadm.md)**
+
+---
 
 ## 클러스터 구축
 
 [K8S: Setting up the cluster](https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/setup-ha-etcd-with-kubeadm/#setting-up-the-cluster)
 
 etcd 호스트 3 곳에서 공통적으로 관리자 권한으로 진행한다.
+
+---
 
 ### 우선순위 재설정
 
@@ -84,9 +92,11 @@ systemctl daemon-reload
 systemctl restart kubelet
 ```
 
+---
+
 ### kubeadm 설정
 
-etcd-1 호스트에서 진행한다.
+`etcd-1` 호스트에서 진행한다.
 
 etcd 호스트 IP를 차례대로 입력한다.
 
@@ -145,30 +155,30 @@ kubeadm init phase certs etcd-ca
 다음 명령어들을 차례대로 실행한다.
 
 ```bash
-kubeadm init phase certs etcd-server --config=/tmp/${HOST2}/kubeadmcfg.yaml
-kubeadm init phase certs etcd-peer --config=/tmp/${HOST2}/kubeadmcfg.yaml
-kubeadm init phase certs etcd-healthcheck-client --config=/tmp/${HOST2}/kubeadmcfg.yaml
-kubeadm init phase certs apiserver-etcd-client --config=/tmp/${HOST2}/kubeadmcfg.yaml
-cp -R /etc/kubernetes/pki /tmp/${HOST2}/
+kubeadm init phase certs etcd-server --config=/tmp/${HOST2}/kubeadmcfg.yaml;
+kubeadm init phase certs etcd-peer --config=/tmp/${HOST2}/kubeadmcfg.yaml;
+kubeadm init phase certs etcd-healthcheck-client --config=/tmp/${HOST2}/kubeadmcfg.yaml;
+kubeadm init phase certs apiserver-etcd-client --config=/tmp/${HOST2}/kubeadmcfg.yaml;
+cp -R /etc/kubernetes/pki /tmp/${HOST2}/;
 # cleanup non-reusable certificates
-find /etc/kubernetes/pki -not -name ca.crt -not -name ca.key -type f -delete
+find /etc/kubernetes/pki -not -name ca.crt -not -name ca.key -type f -delete;
 
-kubeadm init phase certs etcd-server --config=/tmp/${HOST1}/kubeadmcfg.yaml
-kubeadm init phase certs etcd-peer --config=/tmp/${HOST1}/kubeadmcfg.yaml
-kubeadm init phase certs etcd-healthcheck-client --config=/tmp/${HOST1}/kubeadmcfg.yaml
-kubeadm init phase certs apiserver-etcd-client --config=/tmp/${HOST1}/kubeadmcfg.yaml
-cp -R /etc/kubernetes/pki /tmp/${HOST1}/
-find /etc/kubernetes/pki -not -name ca.crt -not -name ca.key -type f -delete
+kubeadm init phase certs etcd-server --config=/tmp/${HOST1}/kubeadmcfg.yaml;
+kubeadm init phase certs etcd-peer --config=/tmp/${HOST1}/kubeadmcfg.yaml;
+kubeadm init phase certs etcd-healthcheck-client --config=/tmp/${HOST1}/kubeadmcfg.yaml;
+kubeadm init phase certs apiserver-etcd-client --config=/tmp/${HOST1}/kubeadmcfg.yaml;
+cp -R /etc/kubernetes/pki /tmp/${HOST1}/;
+find /etc/kubernetes/pki -not -name ca.crt -not -name ca.key -type f -delete;
 
-kubeadm init phase certs etcd-server --config=/tmp/${HOST0}/kubeadmcfg.yaml
-kubeadm init phase certs etcd-peer --config=/tmp/${HOST0}/kubeadmcfg.yaml
-kubeadm init phase certs etcd-healthcheck-client --config=/tmp/${HOST0}/kubeadmcfg.yaml
-kubeadm init phase certs apiserver-etcd-client --config=/tmp/${HOST0}/kubeadmcfg.yaml
+kubeadm init phase certs etcd-server --config=/tmp/${HOST0}/kubeadmcfg.yaml;
+kubeadm init phase certs etcd-peer --config=/tmp/${HOST0}/kubeadmcfg.yaml;
+kubeadm init phase certs etcd-healthcheck-client --config=/tmp/${HOST0}/kubeadmcfg.yaml;
+kubeadm init phase certs apiserver-etcd-client --config=/tmp/${HOST0}/kubeadmcfg.yaml;
 # No need to move the certs because they are for HOST0
 
 # clean up certs that should not be copied off this host
-find /tmp/${HOST2} -name ca.key -type f -delete
-find /tmp/${HOST1} -name ca.key -type f -delete
+find /tmp/${HOST2} -name ca.key -type f -delete;
+find /tmp/${HOST1} -name ca.key -type f -delete;
 ```
 
 먼저 etcd-2 호스트로 파일을 전송한다.
@@ -181,7 +191,7 @@ root@HOST1 $ mv /root/pki /etc/kubernetes/
 root@HOST1 $ exit
 ```
 
-etcd-3 호스트에도 전송한다.
+`etcd-3` 호스트에도 전송한다.
 
 ```bash
 scp -r /tmp/${HOST2}/* root@${HOST2}:
@@ -198,6 +208,8 @@ root@HOST0 $ kubeadm init phase etcd local --config=/tmp/${HOST0}/kubeadmcfg.yam
 root@HOST1 $ kubeadm init phase etcd local --config=/root/kubeadmcfg.yaml
 root@HOST2 $ kubeadm init phase etcd local --config=/root/kubeadmcfg.yaml
 ```
+
+---
 
 ### 클러스터 확인
 
@@ -219,8 +231,8 @@ k8s.gcr.io/pause    3.1                 da86e6ba6ca1        2 years ago         
 - `${HOST0}`: 호스트 IP: `192.168.10.121`
 
 ```bash
-ETCD_TAG=v3.4.3
-HOST0=192.168.10.121
+ETCD_TAG=v3.4.3;
+HOST0=192.168.10.121;
 
 docker run --rm -it \
 --net host \

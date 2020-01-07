@@ -4,9 +4,7 @@
 
 ![kubeadm HA topology - external etcd](https://d33wubrfki0l68.cloudfront.net/ad49fffce42d5a35ae0d0cc1186b97209d86b99c/5a6ae/images/kubeadm/kubeadm-ha-topology-external-etcd.svg)
 
-## 장단점
-
-[작성 중]
+---
 
 ## 구축 순서
 
@@ -18,13 +16,15 @@
 
 ## 환경 준비
 
-- Ubuntu 18.04.3 LTS (Bionic Beaver)
+- Ubuntu 16.04.6 LTS (Xenial Xerus)
 - Control Plane x3:
   - RAM: 2GB
   - CPU: 2
-- Load Balancer, Etcd x3, Worker:
+- Load Balancer, Etcd x3, Worker x3:
   - RAM: 1GB
   - CPU: 1
+
+---
 
 ## Vagrant 설정
 
@@ -84,11 +84,15 @@ vagrant halt lb
 vagrant halt controlplane-1
 ```
 
+---
+
 ## 로드밸런서
 
-로드밸런서를 준비한다. 여기서는 HAProxy를 사용한다.
+로드밸런서를 준비한다. HAProxy를 사용한다.
 
-[HAProxy를 사용한 로드밸런서 구축](/docs/loadbalancer.md)
+다음 과정을 따라 한다: **[HAProxy를 사용한 로드밸런서 구축](/docs/loadbalancer.md)**
+
+---
 
 ## Etcd
 
@@ -106,7 +110,9 @@ vagrant ssh etcd-2
 vagrant ssh etcd-3
 ```
 
-다음 과정을 따라 한다: [etcd cluster 구축](/docs/etcd-cluster.md)
+다음 과정을 따라 한다: **[etcd cluster 구축](/docs/etcd-cluster.md)**
+
+---
 
 ## Control Plane
 
@@ -124,20 +130,22 @@ vagrant ssh controlplane-2
 vagrant ssh controlplane-3
 ```
 
-다음 과정을 따라 한다: [kubeadm 설치](/docs/install-kubeadm.md)
+다음 과정을 따라 한다: **[kubeadm 설치](/docs/install-kubeadm.md)**
+
+---
 
 ## Etcd 연결
 
 [K8S: Set up the etcd cluster](https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/high-availability/#set-up-the-etcd-cluster)
 
-etcd-1 호스트의 공개키를 controlplane-1 호스트에 저장한다.
+`etcd-1` 호스트의 공개키를 `controlplane-1` 호스트에 저장한다.
 
 ```bash
 root@etcd-1 $ cat /root/.ssh/id_rsa.pub
 root@controlplane-1 $ vi /root/.ssh/authorized_keys
 ```
 
-etcd-1에서 controlplane-1으로 SSH 접속을 확인한다.
+`etcd-1`에서 `controlplane-1`으로 SSH 접속을 확인한다.
 
 ```bash
 root@etcd-1 $ ssh -A 192.168.10.111
@@ -146,7 +154,7 @@ root@controlplane-1:~$ exit
 root@etcd-1 $
 ```
 
-controlplane-1에서 디렉터리를 생성한다.
+`controlplane-1`에서 디렉터리를 생성한다.
 
 ```bash
 mkdir -p /etc/kubernetes/pki/etcd
@@ -155,11 +163,13 @@ mkdir -p /etc/kubernetes/pki/etcd
 etcd-1에서 controlplane-1으로 파일을 전송한다.
 
 ```bash
-CONTROL_PLANE="root@192.168.10.111"
-scp /etc/kubernetes/pki/etcd/ca.crt "${CONTROL_PLANE}":/etc/kubernetes/pki/etcd/ca.crt
-scp /etc/kubernetes/pki/apiserver-etcd-client.crt "${CONTROL_PLANE}":/etc/kubernetes/pki/apiserver-etcd-client.crt
-scp /etc/kubernetes/pki/apiserver-etcd-client.key "${CONTROL_PLANE}":/etc/kubernetes/pki/apiserver-etcd-client.key
+CONTROL_PLANE="root@192.168.10.111";
+scp /etc/kubernetes/pki/etcd/ca.crt "${CONTROL_PLANE}":/etc/kubernetes/pki/etcd/ca.crt;
+scp /etc/kubernetes/pki/apiserver-etcd-client.crt "${CONTROL_PLANE}":/etc/kubernetes/pki/apiserver-etcd-client.crt;
+scp /etc/kubernetes/pki/apiserver-etcd-client.key "${CONTROL_PLANE}":/etc/kubernetes/pki/apiserver-etcd-client.key;
 ```
+
+---
 
 ## 첫번째 Control Plane 실행
 
@@ -204,9 +214,9 @@ Your Kubernetes control-plane has initialized successfully!
 먼저 리눅스 일반 계정으로 쿠버네티스를 사용하기 위해서 권한을 설정한다.
 
 ```bash
-mkdir -p $HOME/.kube
-sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
-sudo chown $(id -u):$(id -g) $HOME/.kube/config
+mkdir -p $HOME/.kube;
+sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config;
+sudo chown $(id -u):$(id -g) $HOME/.kube/config;
 ```
 
 CNI 플러그인을 설치한다.
@@ -217,9 +227,11 @@ CNI 플러그인을 설치한다.
 kubectl apply -f "https://cloud.weave.works/k8s/net?k8s-version=$(kubectl version | base64 | tr -d '\n')"
 ```
 
+---
+
 ## Control Plane 클러스터 연결
 
-controlplane-2, controlplane-3 노드에서 다음 명령어를 실행한다.
+`controlplane-2`, `controlplane-3` 노드에서 다음 명령어를 실행한다.
 
 ```bash
 sudo kubeadm join 192.168.10.101:6443 --token jjnixg.bbg4e7amhd32vi1r \
@@ -241,23 +253,23 @@ This node has joined the cluster and a new control plane instance was created:
 Join이 완료되었으면 마찬가지로 권한 설정을 한다.
 
 ```bash
-mkdir -p $HOME/.kube
-        sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
-        sudo chown $(id -u):$(id -g) $HOME/.kube/config
+mkdir -p $HOME/.kube;
+sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config;
+sudo chown $(id -u):$(id -g) $HOME/.kube/config;
 ```
 
 연결된 Control Plane 노드를 확인해본다.
 
 ```bash
 kubectl get nodes
+
+# NAME             STATUS   ROLES    AGE     VERSION
+# controlplane-1   Ready    master   11m     v1.17.0
+# controlplane-2   Ready    master   2m57s   v1.17.0
+# controlplane-3   Ready    master   2m58s   v1.17.0
 ```
 
-```bash
-NAME             STATUS   ROLES    AGE     VERSION
-controlplane-1   Ready    master   11m     v1.17.0
-controlplane-2   Ready    master   2m57s   v1.17.0
-controlplane-3   Ready    master   2m58s   v1.17.0
-```
+---
 
 ## Worker 노드 연결
 
@@ -273,7 +285,7 @@ vagrant up worker-1
 vagrant ssh worker-1
 ```
 
-다음 과정을 따라 한다: [kubeadm 설치](/docs/install-kubeadm.md)
+다음 과정을 따라 한다: **[kubeadm 설치](/docs/install-kubeadm.md)**
 
 기본 설정이 완료되었으면 다음 명령어를 실행한다.
 
@@ -301,14 +313,14 @@ NAME             STATUS     ROLES    AGE   VERSION
 controlplane-1   Ready      master   21m   v1.17.0
 controlplane-2   Ready      master   12m   v1.17.0
 controlplane-3   Ready      master   12m   v1.17.0
-worker-1         NotReady   <none>   98s   v1.17.0
+worker-1         Ready      <none>   98s   v1.17.0
 ```
 
-[작성 중]
+---
 
 ## 테스트
 
-[간단한 배포 튜토리얼](/docs/sample-tutorial.md)
+간단한 서비스 배포 [튜토리얼](/docs/tutorial.md)을 따라하여 Kubernetes HA 클러스터가 잘 구축되었는지 확인한다.
 
 
 

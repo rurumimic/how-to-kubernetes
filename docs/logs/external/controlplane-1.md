@@ -103,9 +103,7 @@ daemonset.apps/weave-net created
 
 ```bash
 kubectl get nodes
-```
 
-```bash
 NAME             STATUS   ROLES    AGE     VERSION
 controlplane-1   Ready    master   11m     v1.17.0
 controlplane-2   Ready    master   2m57s   v1.17.0

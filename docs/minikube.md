@@ -18,9 +18,13 @@
 - Container Network Interface
 - Ingress
 
+---
+
 ## 설치
 
 [미니큐브 설치](/docs/install-minikube.md)
+
+---
 
 ## 실습
 

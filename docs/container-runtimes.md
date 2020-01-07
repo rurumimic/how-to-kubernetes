@@ -13,9 +13,9 @@ Pods에서 컨테이너를 실행하기 위해서, 쿠버네티스는 컨테이�
 
 - [K8S: Docker](https://kubernetes.io/docs/setup/production-environment/container-runtimes/#docker)
 
-다음은 Ubuntu 18에서 Docker v19.03.4 설치 방법이다.
+다음은 Ubuntu 16에서 Docker v19.03.4 설치 방법이다.
 
-### Ubuntu 18
+### Ubuntu 16
 
 root 권한으로 진행한다.
 

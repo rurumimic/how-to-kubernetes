@@ -4,6 +4,8 @@
 
 [K8S: Installing kubeadm](https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/install-kubeadm/)
 
+---
+
 ## Disable Swap
 
 kubelet가 잘 동작하기 위해서는 swap을 비활성화 해야 한다.
@@ -16,23 +18,23 @@ swapoff -a
 
 ```bash
 free -m
+
+#               total        used        free      shared  buff/cache   available
+# Mem:           1993          86        1313           0         593        1750
+# Swap:             0           0           0
 ```
 
-```bash
-              total        used        free      shared  buff/cache   available
-Mem:           1993          86        1313           0         593        1750
-Swap:             0           0           0
-```
+---
 
 ## MAC 주소와 product_uuid 확인
 
 이 과정은 건너 뛴다. 신경 안 써도 된다. 가상 머신이 자동으로 유일한 값으로 설정한다.
 
 ```bash
+# MAC 주소
 ip link
-```
 
-```bash
+# product_uuid
 sudo cat /sys/class/dmi/id/product_uuid
 ```
 
@@ -53,18 +55,19 @@ Vagrant Box로 설치한 Ubuntu는 nftable을 사용하지 않는 것 같으니,
 
 넘어가자.
 
+---
+
 ## Runtime 설치
 
 - [K8S: Installing runtime](https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/install-kubeadm/#installing-runtime)
 - [K8S: Container runtimes](https://kubernetes.io/docs/setup/production-environment/container-runtimes/)
 
-쿠버네티스 1.6.0 버전부터 Container Runtime Interface를 기본으로 사용한다.
-
-Runtime 우선 순위: Docker > containerd > CRI-O
-
+쿠버네티스 1.6.0 버전부터 Container Runtime Interface를 기본으로 사용한다.  
 런타임으로 Docker를 사용하자.
 
-[컨테이너 런타임 설치 방법](/docs/container-runtimes.md)
+다음 과정을 따라 한다: **[컨테이너 런타임 설치](/docs/container-runtimes.md)**
+
+---
 
 ## kubeadm, kubelet, kubectl 설치
 
@@ -79,19 +82,15 @@ Runtime 우선 순위: Docker > containerd > CRI-O
 - Kubernetes [version and version-skew policy](https://kubernetes.io/docs/setup/release/version-skew-policy/)
 - Kubeadm-specific [version skew policy](https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/create-cluster-kubeadm/#version-skew-policy)
 
-하지만 다음대로 설치하면 문제없다.
+root 권한으로 진행한다. `apt-transport-https`, `curl`는 이미 도커를 설치할 때 설치했다.
 
-root 권한으로 진행한다. (`sudo -Es`)
-
-`apt-transport-https`, `curl`는 이미 도커를 설치할 때 설치했다.
-
-GPG key 추가
+**GPG key 추가**
 
 ```bash
 curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
 ```
 
-저장소 추가
+**저장소 추가**
 
 ```bash
 cat <<EOF | sudo tee /etc/apt/sources.list.d/kubernetes.list
@@ -99,19 +98,21 @@ deb https://apt.kubernetes.io/ kubernetes-xenial main
 EOF
 ```
 
-설치
+**kubelet, kubeadm, kubectl 설치**
 
 ```bash
 apt-get update && apt-get install -y kubelet kubeadm kubectl
 ```
 
-업데이트에서 제외
+**앞으로 업데이트에서 제외**
 
 ```bash
 apt-mark hold kubelet kubeadm kubectl
 ```
 
 이제부터 kubelet은 kubeadm이 어떤 명령을 내릴지 기다리면서 계속 재시작된다.
+
+---
 
 ## cgroup driver 설정
 
@@ -120,6 +121,8 @@ Control Plane에서 kubelet이 사용하는 cgroup driver 설정을 해야 한�
 도커를 사용하면 자동으로 설정된다.
 
 넘어간다.
+
+---
 
 ## Control Plane의 Config Image
 

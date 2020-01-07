@@ -10,6 +10,8 @@ macOS에서 VMX 기능이 지원되는지 확인한다.
 sysctl -a | grep -E --color 'machdep.cpu.features|VMX'
 ```
 
+---
+
 ## 미니큐브 설치
 
 쿠버네티스를 사용하기 위해서는 다음 3가지를 설치해야 한다.
@@ -17,6 +19,8 @@ sysctl -a | grep -E --color 'machdep.cpu.features|VMX'
 1. kubectl: command-line tool. 쿠버네티스 명령 툴.
 2. Hypervisor: [VirtualBox](https://www.virtualbox.org/wiki/Downloads)를 설치한다.
 3. Minikube
+
+---
 
 ### kubectl 설치
 
@@ -44,6 +48,8 @@ kubectl version
 
 - [쉘 자동완성 설정](https://kubernetes.io/docs/tasks/tools/install-kubectl/#enabling-shell-autocompletion)
 
+---
+
 ### Minikube 설치
 
 [K8S: Install Minikube](https://kubernetes.io/docs/tasks/tools/install-minikube/#install-minikube)
@@ -56,6 +62,8 @@ kubectl version
 ```bash
 brew install minikube
 ```
+
+---
 
 ## 설치 확인
 
@@ -85,6 +93,8 @@ kubeconfig: Configured
 ```bash
 minikube stop
 ```
+
+---
 
 ## 로컬 상태 초기화
 
