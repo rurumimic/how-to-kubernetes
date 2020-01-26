@@ -18,4 +18,6 @@
 
 쿠버네티스를 **사용하는 방법**
 
-1. [Horizontal Pod Autoscaler]()
+1. [Horizontal Pod Autoscaler with minikube](docs/horizontal-pod-autoscaler.md)
+   1. [HPA with a single control-plane cluster](docs/hpa-single-control-plane.md)
+   2. [Autoscaling on multiple metrics and custom metrics](docs/hpa-custom-metrics.md)

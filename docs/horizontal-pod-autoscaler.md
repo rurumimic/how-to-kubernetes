@@ -54,15 +54,7 @@ minikube addons list
 
 ## Run & expose php-apache server
 
-`Dockerfile`을 작성한다.
-
-```ruby
-FROM php:5-apache
-ADD index.php /var/www/html/index.php
-RUN chmod a+rx index.php
-```
-
-`index.php`는 CPU가 부담을 받도록 어려운 계산식을 작성한다.
+`k8s.gcr.io/hpa-example` 도커 이미지는 CPU가 부담을 받도록 만들어진 서버다.
 
 ```php
 <?php
@@ -164,11 +156,10 @@ kubectl get deployment php-apache
 # php-apache   1/1     1            1           16m
 ```
 
-
-## Delete service and pod
+## Delete service and deployment
 
 ```bash
-kubectl delete pod,service php-apache
+kubectl delete deployment,service php-apache
 ```
 
 ## FAQ

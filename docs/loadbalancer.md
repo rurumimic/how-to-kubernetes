@@ -2,13 +2,6 @@
 
 로드밸런서는 간단하게 HAProxy를 사용한다.
 
-로드밸런서 VM으로 접속한다.
-
-```bash
-vagrant up lb # VM 생성
-vagrant ssh lb # VM 접속
-```
-
 ---
 
 ## HAProxy

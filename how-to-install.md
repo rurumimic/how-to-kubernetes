@@ -15,7 +15,7 @@
 쿠버네티스 클러스터를 구축하는 방법은 여러가지다.
 
 1. kubeadm을 사용해 클러스터 구축하기
-   1. Single control-plane cluster
+   1. [Single control-plane cluster](/docs/single-control-plane.md)
    2. HA clusters: Stacked etcd topology
    3. [HA clusters: External etcd topology](/docs/external-topology.md)
 2. Installing Kubernetes with kops

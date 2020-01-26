@@ -40,49 +40,6 @@
   - 192.168.10.121 ~ 123
 - Worker x 3
   - 192.168.10.131 ~ 133
-  
-### 간단한 사용 방법
-
-Vagrant 설정이 잘 되었는지 확인한다.
-
-```bash
-vagrant status
-
-Current machine states:
-
-lb                        not created (virtualbox)
-controlplane-1            not created (virtualbox)
-controlplane-2            not created (virtualbox)
-controlplane-3            not created (virtualbox)
-etcd-1                    not created (virtualbox)
-etcd-2                    not created (virtualbox)
-etcd-3                    not created (virtualbox)
-worker-1                  not created (virtualbox)
-worker-2                  not created (virtualbox)
-worker-3                  not created (virtualbox)
-```
-
-사용자의 로컬 환경에 따라 자원이 부족할 수 있다.  
-각 노드의 이름을 지정해서 차례대로 VM을 실행한다.
-
-```bash
-vagrant up lb
-vagrant up controlplane-1 controlplane-2 controlplane-3
-```
-
-`ssh` 명령으로 VM에 접속한다.
-
-```bash
-vagrant ssh lb
-vagrant ssh controlplane-1
-```
-
-`halt` 명령으로 VM을 종료한다.
-
-```bash
-vagrant halt lb
-vagrant halt controlplane-1
-```
 
 ---
 
@@ -96,39 +53,11 @@ vagrant halt controlplane-1
 
 ## Etcd
 
-VM을 생성한다.
-
-```bash
-vagrant up etcd-1 etcd-2 etcd-3
-```
-
-터미널 창을 3개를 띄워 호스트에 각각 접속한다.
-
-```bash
-vagrant ssh etcd-1
-vagrant ssh etcd-2
-vagrant ssh etcd-3
-```
-
 다음 과정을 따라 한다: **[etcd cluster 구축](/docs/etcd-cluster.md)**
 
 ---
 
 ## Control Plane
-
-VM을 생성한다.
-
-```bash
-vagrant up controlplane-1 controlplane-2 controlplane-3
-```
-
-터미널 창을 3개를 띄워 호스트에 각각 접속한다.
-
-```bash
-vagrant ssh controlplane-1
-vagrant ssh controlplane-2
-vagrant ssh controlplane-3
-```
 
 다음 과정을 따라 한다: **[kubeadm 설치](/docs/install-kubeadm.md)**
 
