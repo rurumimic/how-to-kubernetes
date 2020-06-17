@@ -24,6 +24,7 @@
    1. Controllers
       1. [ReplicaSet](docs/concepts/workloads/controllers/01.replicaset.md)
       1. [ReplicationController](docs/concepts/workloads/controllers/02.replication.controller.md)
+      1. [Deployments](docs/concepts/workloads/controllers/03.deployments.md)
 1. Services, Load Balancing, and Networking
 1. Storage
 1. Configuration
